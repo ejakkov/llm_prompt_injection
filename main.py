@@ -40,20 +40,19 @@ from defence.other.input_sanitization import InputSanitization
 logger = loguru.logger
 
 DEFENCES_LIST = [
-    Defence(),
-    BasicDefence(),
-    Encoding(),
-    FewShotLearning(),
-    Tagging(),
-    DataMarking(),
-    Encoding(),
-    Paraphrasing(),
+    # Defence(),
+    # BasicDefence(),
+    # Encoding(),
+    # FewShotLearning(),
+    # Tagging(),
+    # DataMarking(),
+    # Paraphrasing(),
     LLMPiDetection()
 ]
 
 INTENTIONS_LIST = [
     ContentManipulation(),
-    IllegalInformationRetrieval(),
+    # IllegalInformationRetrieval(),
 ]
 
 logger = loguru.logger
