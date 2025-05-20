@@ -35,7 +35,6 @@ from defence.prompt_engineering.datamarking import DataMarking
 from defence.prompt_engineering.tagging import Tagging
 from defence.other.paraphrasing import Paraphrasing
 from defence.other.llm_pi_detection import LLMPiDetection
-from defence.other.input_sanitization import InputSanitization
 
 logger = loguru.logger
 
@@ -46,14 +45,13 @@ DEFENCES_LIST = [
     FewShotLearning(),
     Tagging(),
     DataMarking(),
-    Encoding(),
     Paraphrasing(),
     LLMPiDetection()
 ]
 
 INTENTIONS_LIST = [
     ContentManipulation(),
-    IllegalInformationRetrieval(),
+    IllegalInformationRetrieval()
 ]
 
 logger = loguru.logger

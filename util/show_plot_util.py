@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import json
 
-with open(f'results\\2025-04-08_21-51-39\ContentManipulation_gpt-3.5-turbo_results.json', encoding="utf-8") as f:  # <- nomaini uz savu JSON failu
+with open(f'', encoding="utf-8") as f:
     data = json.load(f)
 df = pd.DataFrame(data)
 
