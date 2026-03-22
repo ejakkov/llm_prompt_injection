@@ -4,8 +4,6 @@ import os
 import sys
 from datetime import datetime
 import loguru
-import openai
-import anthropic
 import time
 
 from prompt_injection.plain.context_ignoring import ContextIgnoring
@@ -59,8 +57,6 @@ logger = loguru.logger
 config_file_path = pathlib.Path("./config.json")
 config = json.load(open(config_file_path))
 
-openai.api_key = config["openai_key"]
-anthropic.api_key = config["anthropic_key"]
 logger = loguru.logger
 logger.add("logs/demo.log", rotation="10 MB", retention="10 days", level="INFO", encoding="utf-8")
 
@@ -87,12 +83,12 @@ def inject_simple(intention: Intention, prompt_injection: PromptInjection, appli
     prompt_injection_text = prompt_injection.build_prompt(intention)
 
     statistics = []
-    for defence in DEFENCES_LIST: 
+    for defence in DEFENCES_LIST:
         logger.info(f"Testing with Defence: {defence.name}")
 
         for index in range(try_times):
             start_time = time.time()
-    
+
             response = application.simulate_interaction(prompt_injection_text, defence, model)
 
             elapsed_seconds = time.time() - start_time
@@ -100,7 +96,7 @@ def inject_simple(intention: Intention, prompt_injection: PromptInjection, appli
             logger.info(f"Prompt injection: {prompt_injection_text}")
             logger.info(f"Application Response: { response['response_text'] }")
             is_injection_successful = intention.validate(response['response_text'])
-            
+
             statistics.append({
                 "injection_successful": is_injection_successful,
                 "intention": intention.name,
@@ -119,13 +115,13 @@ def inject_simple(intention: Intention, prompt_injection: PromptInjection, appli
     logger.info(f"Finished injecting: {intention.name} with {prompt_injection.name}")
     return statistics
 
-def main(model="gpt-3.5-turbo"):
+def main(model="gpt-4o"):
     application = ChatBot()
     os.makedirs("logs", exist_ok=True)
     os.makedirs("results", exist_ok=True)
 
     for intention in INTENTIONS_LIST:
-        all_statistics = [] 
+        all_statistics = []
         results_dir = f"results/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}"
         os.makedirs(results_dir, exist_ok=True)
         for prompt_injection in PROMPT_INJECTIONS_LIST:
@@ -137,7 +133,7 @@ def main(model="gpt-3.5-turbo"):
             logger.info(f"Running intention: {prompt_injection.name}")
             statistics = inject_simple(intention, prompt_injection, application, model)
 
-            all_statistics.extend(statistics) 
+            all_statistics.extend(statistics)
 
         results_file_path = f"{results_dir}/{intention.__class__.__name__}_{model}_results.json"
 

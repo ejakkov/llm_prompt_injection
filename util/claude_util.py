@@ -16,13 +16,13 @@ def completion_with_claude(system_message: str, prompt: str, defence: Defence = 
 
     if defence.name == "Few-shot learning":
         messages = defence.few_shot_messages + [{"role": "user", "content": prompt}]
-    
+
     response = client.messages.create(
         max_tokens=1024,
         model=model,
         system=system_message,
         messages=messages,
-        temperature=1.0,
+        temperature=0,
     )
 
     return {

@@ -1,12 +1,8 @@
 import dataclasses
-
 import loguru
-import pdb
-
 from util.encoder_util import encode_to_base64
 from util.sanitize_input_util import sanitize_input
 from prompt_injection.base_injection import PromptInjection
-import openai
 from defence.base_defence import Defence
 from defence.prompt_engineering.basic_defence import BasicDefence
 from util.openai_util import completion_with_chatgpt
@@ -18,7 +14,7 @@ class ChatBot:
     name: str = "chatbot"
     application_document: str = "This app can be used to answer user questions."
 
-    def simulate_interaction(self, prompt_injection: str, defence: Defence, model: str = "gpt-3.5-turbo"):
+    def simulate_interaction(self, prompt_injection: str, defence: Defence, model: str = "gpt-3.5-turbo", verbose: bool = True):
             system_message = defence.system_prompt
             logger.info(f"System message: {system_message}")
             prompt_text = prompt_injection
@@ -47,11 +43,17 @@ class ChatBot:
 
             content = response['response_text']
             logger.info(f"Response: {content}")
-            print("=" * 50)
-            print(f"System message: {system_message}")
-            print(f"Defence: {defence.__class__.__name__}")
-            print(f"Prompt: {prompt}")
-            print(f"Prompt injection: {prompt_text}")
-            print(f"Response: {content}")
-            print("=" * 50)
-            return response
+            if verbose:
+                print("=" * 50)
+                print(f"System message: {system_message}")
+                print(f"Defence: {defence.__class__.__name__}")
+                print(f"Prompt: {prompt}")
+                print(f"Prompt injection: {prompt_text}")
+                print(f"Response: {content}")
+                print("=" * 50)
+            out = dict(response)
+            out["system_message"] = system_message
+            out["defence_class"] = defence.__class__.__name__
+            out["prompt_to_model"] = prompt
+            out["raw_user_message"] = prompt_text
+            return out
